@@ -303,6 +303,7 @@ void get_userinfo(const Config &config,
                   const char *userinfo_endpoint,
                   const char *token,
                   const char *username_attribute,
+                  const char *name_attribute,
                   Userinfo *userinfo)
 {
     CURL *curl;
@@ -332,7 +333,7 @@ void get_userinfo(const Config &config,
         auto data = json::parse(readBuffer);
         userinfo->sub = data.at("sub");
         userinfo->username = data.at(username_attribute);
-        userinfo->name = data.at("name");
+        userinfo->name = data.at(name_attribute);
         userinfo->groups = data.at("groups").get<std::vector<std::string>>();
     }
     catch (json::exception &e)
@@ -535,8 +536,9 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
         poll_for_token(config, config.client_id.c_str(), config.client_secret.c_str(),
                        config.token_endpoint.c_str(),
                        device_auth_response.device_code.c_str(), token);
-        get_userinfo(config, config.userinfo_endpoint.c_str(), token.c_str(),
-                     config.username_attribute.c_str(), &userinfo);
+          get_userinfo(config, config.userinfo_endpoint.c_str(), token.c_str(),
+                     config.username_attribute.c_str(), config.name_attribute.c_str(),
+                     &userinfo);
     }
     catch (PamError &e)
     {

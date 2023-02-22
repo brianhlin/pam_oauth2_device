@@ -16,6 +16,7 @@ public:
         token_endpoint,
         userinfo_endpoint,
         username_attribute,
+        name_attribute,
         ldap_host,
         ldap_basedn,
         ldap_user,
