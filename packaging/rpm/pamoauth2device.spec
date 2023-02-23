@@ -53,7 +53,7 @@ cp config_template.json ${RPM_BUILD_ROOT}%{_sysconfdir}/pam_oauth2_device/config
 %files
 %doc LICENSE README.md
 %{_lib}/security/pam_oauth2_device.so
-%{_sysconfdir}/pam_oauth2_device/config.json
+%config(noreplace) %{_sysconfdir}/pam_oauth2_device/config.json
 
 
 %changelog
