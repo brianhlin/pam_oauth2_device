@@ -1,5 +1,5 @@
 # pam_oauth2_device version
-%define _version 0.1
+%define _version 0.1.2.chtc
 %define _lib /lib64
 
 
@@ -57,6 +57,9 @@ cp config_template.json ${RPM_BUILD_ROOT}%{_sysconfdir}/pam_oauth2_device/config
 
 
 %changelog
+* Mon Aug 2 2021 Brian Bockelman <bbockelm@morgridge.org> - 0.1.2.chtc
+- Add support for the device code flow for test.cilogon.org
+
 * Thu Aug 13 2020 Will Furnell <will.furnell@stfc.ac.uk> - 0.1
 - Revamped completely for STFC use
 
