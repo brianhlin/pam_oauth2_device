@@ -1,0 +1,28 @@
+name: Build RPMS on release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  Build-RPMS:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up build directory
+      run: |
+        mkdir -p ${{github.workspace}}/build_output
+        sudo chown 1000:1000 ${{github.workspace}}/build_output
+
+    - name: Build RPMS 
+      run: |
+          cd ./packaging/rpm
+          docker build -t pamoauth2device-rpm-build .
+          docker run --rm -v ${{github.workspace}}/build_output:/data pamoauth2device-rpm-build:latest cp -r rpmbuild/RPMS /data
+          
+    - name: Upload RPMS
+      uses: actions/upload-artifact@v3
+      with:
+        name: PAM OAuth2 RPMS
+        path: build_output/RPMS
