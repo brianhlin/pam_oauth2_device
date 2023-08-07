@@ -40,10 +40,13 @@ jobs:
           docker run --rm \
                      -v ${{github.workspace}}/build_output:/data \
                      pamoauth2device-rpm-build:latest \
-                     cp -r rpmbuild/RPMS /data
+                     cp -r rpmbuild/RPMS rpmbuild/SRPMS /data
 
-    - name: Upload RPMS
-      uses: actions/upload-artifact@v3
+    - name: Upload Release Artifacts
+      uses: softprops/action-gh-release@v1
       with:
-        name: PAM OAuth2 RPMS
-        path: build_output/RPMS
+        files: |
+          ${{ github.workspace}}/build_output/RPMS/x86_64/*
+          ${{ github.workspace}}/build_output/SRPMS/*
+        tag_name: ${{ steps.get-git-tag.outputs.tag_name }}
+
