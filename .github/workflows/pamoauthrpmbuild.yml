@@ -1,3 +1,4 @@
+---
 name: Build RPMS on release
 
 on:
@@ -21,15 +22,18 @@ jobs:
         mkdir -p ${{github.workspace}}/build_output
         sudo chown 1000:1000 ${{github.workspace}}/build_output
 
-    - name: Build RPMS 
+    - name: Build RPMs
       env:
         IMAGE_BASE: ${{ matrix.os_base }}
       run: |
           cd ./packaging/rpm
           docker build --build-arg IMAGE_BASE=$IMAGE_BASE \
                        -t pamoauth2device-rpm-build .
-          docker run --rm -v ${{github.workspace}}/build_output:/data pamoauth2device-rpm-build:latest cp -r rpmbuild/RPMS /data
-          
+          docker run --rm \
+                     -v ${{github.workspace}}/build_output:/data \
+                     pamoauth2device-rpm-build:latest \
+                     cp -r rpmbuild/RPMS /data
+
     - name: Upload RPMS
       uses: actions/upload-artifact@v3
       with:
