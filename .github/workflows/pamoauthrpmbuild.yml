@@ -6,6 +6,12 @@ on:
 
 jobs:
   Build-RPMS:
+    strategy:
+      fail-fast: false
+      matrix:
+        os_base:
+          - "docker.io/centos:centos7"
+          - "quay.io/almalinux/almalinux:8"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -16,9 +22,12 @@ jobs:
         sudo chown 1000:1000 ${{github.workspace}}/build_output
 
     - name: Build RPMS 
+      env:
+        IMAGE_BASE: ${{ matrix.os_base }}
       run: |
           cd ./packaging/rpm
-          docker build -t pamoauth2device-rpm-build .
+          docker build --build-arg IMAGE_BASE=$IMAGE_BASE \
+                       -t pamoauth2device-rpm-build .
           docker run --rm -v ${{github.workspace}}/build_output:/data pamoauth2device-rpm-build:latest cp -r rpmbuild/RPMS /data
           
     - name: Upload RPMS

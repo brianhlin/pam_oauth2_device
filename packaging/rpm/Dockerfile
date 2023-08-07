@@ -1,4 +1,10 @@
-FROM centos:7
+# Default to EL8 builds
+ARG IMAGE_BASE=quay.io/centos/centos:stream8
+
+FROM $IMAGE_BASE
+
+# "ARG IMAGE_BASE" needs to be here again because the previous instance has gone out of scope.
+ARG IMAGE_BASE=quay.io/centos/centos:stream8
 
 RUN yum install -y \
     gcc \
