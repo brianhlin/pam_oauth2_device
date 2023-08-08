@@ -1,4 +1,11 @@
-FROM centos:7
+# Default to EL8 builds
+ARG IMAGE_BASE=quay.io/almalinux/almalinux:8
+
+FROM $IMAGE_BASE
+
+# "ARG IMAGE_BASE" needs to be here again because the previous instance has gone out of scope.
+ARG IMAGE_BASE=quay.io/almalinux/almalinux:8
+ARG TARBALL_URL=https://github.com/CHTC/pam_oauth2_device/archive/v0.1.3.chtc.tar.gz
 
 RUN yum install -y \
     gcc \
@@ -15,14 +22,11 @@ RUN groupadd builder \
 
 USER builder
 
-# This version must be identical to the version in pamoauth2device.spec
-ENV PACKAGE_VERSION=0.1.3.chtc
-
 WORKDIR /home/builder
 
 RUN mkdir -p rpmbuild/SOURCES \
  && cd rpmbuild/SOURCES \
- && curl -L -O https://github.com/stfc/pam_oauth2_device/archive/v${PACKAGE_VERSION}.tar.gz
+ && curl -L -O $TARBALL_URL
 
 COPY pamoauth2device.spec .
 

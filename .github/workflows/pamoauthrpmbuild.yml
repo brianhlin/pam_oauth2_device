@@ -1,3 +1,4 @@
+---
 name: Build RPMS on release
 
 on:
@@ -6,23 +7,46 @@ on:
 
 jobs:
   Build-RPMS:
+    strategy:
+      fail-fast: false
+      matrix:
+        os_base:
+          - "docker.io/centos:centos7"
+          - "quay.io/almalinux/almalinux:8"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: Get git tag
+      id: get-git-tag
+      run: |
+        echo "tag_name=${GITHUB_REF##refs/tags/}" >> $GITHUB_OUTPUT
 
     - name: Set up build directory
       run: |
         mkdir -p ${{github.workspace}}/build_output
         sudo chown 1000:1000 ${{github.workspace}}/build_output
 
-    - name: Build RPMS 
+    - name: Build RPMs
+      env:
+        IMAGE_BASE: ${{ matrix.os_base }}
+        GIT_TAG: ${{ steps.get-git-tag.outputs.tag_name }}
       run: |
+          URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/archive/${GIT_TAG}.tar.gz
           cd ./packaging/rpm
-          docker build -t pamoauth2device-rpm-build .
-          docker run --rm -v ${{github.workspace}}/build_output:/data pamoauth2device-rpm-build:latest cp -r rpmbuild/RPMS /data
-          
-    - name: Upload RPMS
-      uses: actions/upload-artifact@v3
+          docker build --build-arg IMAGE_BASE=$IMAGE_BASE \
+                       --build-arg TARBALL_URL=$URL \
+                       -t pamoauth2device-rpm-build .
+          docker run --rm \
+                     -v ${{github.workspace}}/build_output:/data \
+                     pamoauth2device-rpm-build:latest \
+                     cp -r rpmbuild/RPMS rpmbuild/SRPMS /data
+
+    - name: Upload Release Artifacts
+      uses: softprops/action-gh-release@v1
       with:
-        name: PAM OAuth2 RPMS
-        path: build_output/RPMS
+        files: |
+          ${{ github.workspace}}/build_output/RPMS/x86_64/*
+          ${{ github.workspace}}/build_output/SRPMS/*
+        tag_name: ${{ steps.get-git-tag.outputs.tag_name }}
+
