@@ -4,7 +4,7 @@ ARG IMAGE_BASE=quay.io/almalinux/almalinux:8
 FROM $IMAGE_BASE
 
 # "ARG IMAGE_BASE" needs to be here again because the previous instance has gone out of scope.
-ARG IMAGE_BASE=quay.io/centos/centos:stream8
+ARG IMAGE_BASE=quay.io/almalinux/almalinux:8
 ARG TARBALL_URL=https://github.com/CHTC/pam_oauth2_device/archive/v0.1.3.chtc.tar.gz
 
 RUN yum install -y \
