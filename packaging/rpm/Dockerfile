@@ -16,7 +16,7 @@ RUN groupadd builder \
 USER builder
 
 # This version must be identical to the version in pamoauth2device.spec
-ENV PACKAGE_VERSION=0.1
+ENV PACKAGE_VERSION=0.1.3.chtc
 
 WORKDIR /home/builder
 

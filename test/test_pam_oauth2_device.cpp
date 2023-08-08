@@ -5,6 +5,7 @@
 #define TOKEN_ENDPOINT "http://localhost:8042/token"
 #define USERINFO_ENDPOINT "http://localhost:8042/userinfo"
 #define USERNAME_ATTRIBUTE "preferred_username"
+#define NAME_ATTRIBUTE "name"
 #define CLIENT_ID "client_id"
 #define CLIENT_SECRET "NDVmODY1ZDczMGIyMTM1MWFlYWM2NmYw"
 #define SCOPE "openid profile"
@@ -46,6 +47,7 @@ TEST(PamTest, Userinfo)
     get_userinfo(USERINFO_ENDPOINT,
                  ACCESS_TOKEN,
                  USERNAME_ATTRIBUTE,
+                 NAME_ATTRIBUTE,
                  &userinfo);
     EXPECT_EQ(userinfo.sub, "YzQ4YWIzMzJhZjc5OWFkMzgwNmEwM2M5");
     EXPECT_EQ(userinfo.username, "jdoe");

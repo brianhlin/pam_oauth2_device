@@ -37,6 +37,7 @@ void poll_for_token(const char *client_id,
 void get_userinfo(const char *userinfo_endpoint,
                   const char *token,
                   const char *username_attribute,
+                  const char *name_attribute,
                   Userinfo *userinfo);
 
 #endif // PAM_OAUTH2_DEVICE_HPP
