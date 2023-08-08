@@ -60,7 +60,7 @@ cp config_template.json ${RPM_BUILD_ROOT}%{_sysconfdir}/pam_oauth2_device/config
 * Mon Aug 7 2023 Brian Lin <blin@cs.wisc.edu> - 0.1.3.chtc
 - Allow the name claim to be configurable (INF-748)
 
-* Mon Aug 2 2021 Brian Bockelman <bbockelm@morgridge.org> - 0.1.2.chtc
+* Mon Aug 2 2021 Brian Bockelman <bbockelman@morgridge.org> - 0.1.2.chtc
 - Add support for the device code flow for test.cilogon.org
 
 * Thu Aug 13 2020 Will Furnell <will.furnell@stfc.ac.uk> - 0.1
