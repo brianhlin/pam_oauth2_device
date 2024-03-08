@@ -2,8 +2,7 @@
 name: Build RPMS on release
 
 on:
-  release:
-    types: [published]
+  push:
 
 jobs:
   Build-RPMS:
