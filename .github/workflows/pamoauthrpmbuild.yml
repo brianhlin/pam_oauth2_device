@@ -13,6 +13,7 @@ jobs:
         os_base:
           - "docker.io/centos:centos7"
           - "quay.io/almalinux/almalinux:8"
+          - "quay.io/almalinux/almalinux:9"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
