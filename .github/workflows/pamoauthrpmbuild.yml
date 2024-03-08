@@ -1,8 +1,7 @@
 ---
 name: Build RPMS on release
 
-on:
-  push:
+on: push
 
 jobs:
   Build-RPMS:
