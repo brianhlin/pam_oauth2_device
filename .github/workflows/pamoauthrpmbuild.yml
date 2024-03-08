@@ -20,7 +20,7 @@ jobs:
     - name: Get git tag
       id: get-git-tag
       run: |
-        echo "tag_name=${GITHUB_REF##refs/tags/}" >> $GITHUB_OUTPUT
+        echo "tag_name=TEST" >> $GITHUB_OUTPUT
 
     - name: Set up build directory
       run: |
@@ -37,7 +37,7 @@ jobs:
           docker build --build-arg IMAGE_BASE=$IMAGE_BASE \
                        --build-arg TARBALL_URL=$URL \
                        -t pamoauth2device-rpm-build .
-          docker run --rm \
+          docker run --rm -t \
                      -v ${{github.workspace}}/build_output:/data \
                      pamoauth2device-rpm-build:latest \
                      cp -r rpmbuild/RPMS rpmbuild/SRPMS /data
