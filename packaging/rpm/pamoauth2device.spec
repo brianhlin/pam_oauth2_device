@@ -1,15 +1,15 @@
 # pam_oauth2_device version
-%define _version 0.1
+%define _version 1.03
 %define _lib /lib64
 
 
 Name:    pamoauth2device
 Version: %{_version}
-Release: 1%{?dist}
+Release: 1.1%{?dist}
 Summary: PAM module for OAuth 2.0 Device flow
 License: Apache-2.0
-URL:     https://github.com/stfc/pam_oauth2_device/
-Source0: https://github.com/stfc/pam_oauth2_device/archive/v%{_version}.tar.gz
+URL:     https://github.com/brianhlin/pam_oauth2_device/
+Source0: pam_oauth2_device-%{_version}.tar.gz
 
 
 # List of build-time dependencies:
@@ -57,6 +57,11 @@ cp config_template.json ${RPM_BUILD_ROOT}%{_sysconfdir}/pam_oauth2_device/config
 
 
 %changelog
+* Fri Oct 3 2025 Brian Lin <brian.lin@wisc.edu> - 1.03-1.1
+- Add support for configurable "name" claim
+- Prevent package from stomping on existing config
+- Remove unnecessary token logging
+
 * Thu Aug 13 2020 Will Furnell <will.furnell@stfc.ac.uk> - 0.1
 - Revamped completely for STFC use
 
