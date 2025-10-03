@@ -75,6 +75,7 @@ Userinfo get_userinfo(Config const &config,
 		      pam_oauth2_log &logger,
 		      std::string const &userinfo_endpoint,
 		      std::string const &token,
-		      std::string const &username_attribute);
+		      std::string const &username_attribute,
+                      std::string const &name_attribute);
 
 #endif // PAM_OAUTH2_DEVICE_HPP

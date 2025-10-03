@@ -127,6 +127,7 @@ Thus, at the top level, there is a single object with a number of entries, descr
 | oauth | token\_endpoint | String | Y | Token endpoint | https://${url}/token |
 | oauth | userinfo\_endpoint | String | Y | Userinfo | https://${url}/userinfo |
 | oauth | username\_attribute | String | Y | Attribute for remote username | |
+| oauth | name\_attribute | String | Y | Attribute for a user's full name | |
 | oauth | local\_username\_suffix | String | Y | See usernames | |
 | tls | | Object | Y | | |
 | tls | ca\_bundle | String | N | Concatenated list of trust anchors | Note 2 |

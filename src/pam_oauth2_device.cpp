@@ -262,7 +262,8 @@ get_userinfo(const Config &config,
                   pam_oauth2_log &logger,
                   std::string const &userinfo_endpoint,
                   std::string const &token,
-                  std::string const &username_attribute)
+                  std::string const &username_attribute,
+                  std::string const &name_attribute)
 {
     pam_oauth2_curl curl(config);
 
@@ -274,11 +275,11 @@ get_userinfo(const Config &config,
 	    logger.log(pam_oauth2_log::log_level_t::DEBUG, "Userinfo token: %s", result.c_str());
         auto const data = json::parse(result);
 	auto const the_end = data.end();
-	if(data.find("sub") == the_end || data.find("name") == the_end)
-	    throw "userinfo lacks 'sub' or 'name'";
+	if(data.find("sub") == the_end || data.find(name_attribute) == the_end)
+	    throw "userinfo lacks 'sub' or name_attribute";
 	if(data.find(username_attribute) == the_end)
 	    throw "username_attribute not found in userinfo object";
-        Userinfo ui(data.at("sub"), data.at(username_attribute), data.at("name"));
+        Userinfo ui(data.at("sub"), data.at(username_attribute), data.at(name_attribute));
 	if(data.find("groups") != the_end)
 	    ui.set_groups( data.at("groups").get<std::vector<std::string>>() );
         return ui;
@@ -514,7 +515,7 @@ PAM_EXTERN int pam_sm_authenticate(pam_handle_t *pamh, int flags, int argc, cons
                        config.token_endpoint,
                        device_auth_response.device_code, token);
         Userinfo ui{get_userinfo(config, logger, config.userinfo_endpoint, token,
-				 config.username_attribute)};
+				 config.username_attribute, config.name_attribute)};
 	if (is_authorized(config, logger, username_local, ui)) {
 	    logger.log(pam_oauth2_log::log_level_t::INFO, "%s is authorised", username_local);
 	    return PAM_SUCCESS;

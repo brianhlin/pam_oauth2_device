@@ -9,6 +9,7 @@
         "token_endpoint": "https://provider.com/token",
         "userinfo_endpoint": "https://provider.com/userinfo",
         "username_attribute": "preferred_username",
+        "name_attribute": "name",
         "local_username_suffix": ""
     },
     "tls": {

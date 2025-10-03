@@ -147,6 +147,7 @@ Config::load(const char *path)
 	 variable({"oauth","token_endpoint"},value(""), true, token_endpoint),
 	 variable({"oauth","userinfo_endpoint"},value(""), true, userinfo_endpoint),
 	 variable({"oauth","username_attribute"},value(""),true, username_attribute),
+         variable({"oauth","name_attribute"},value(""),true, name_attribute),
 	 variable({"oauth","local_username_suffix"},value(""),false, local_username_suffix),
 	 variable({"qr","error_correction_level"},value(-1),false, qr_error_correction_level),
 	 variable({"client_debug"},value(false),false, client_debug),
