@@ -221,7 +221,6 @@ void poll_for_token(Config const &config,
 
 	try
         {
-	    logger.log(pam_oauth2_log::log_level_t::DEBUG, "Response from token poll: %s", result.c_str());
             data = json::parse(result);
             if (data["error"].empty())
             {
