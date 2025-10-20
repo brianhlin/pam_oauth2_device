@@ -1,5 +1,5 @@
 CXXFLAGS=-Wall -fPIC -std=c++11
-CFLAGS=-Wall -fPIC
+CFLAGS=-Wall -g -fPIC
 
 LDLIBS=-lpam -lcurl -lldap -llber
 
