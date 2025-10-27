@@ -168,7 +168,7 @@ void make_authorization_request(const Config &config,
     pam_oauth2_curl::params params;
     curl.add_params(params, "client_id", client_id);
     curl.add_params(params, "scope", scope);
-    std::string result{curl.call(config, device_endpoint, params)};
+    std::string result{curl.call(config, logger, device_endpoint, params)};
 
     try
     {
@@ -217,7 +217,7 @@ void poll_for_token(Config const &config,
 
         std::this_thread::sleep_for(std::chrono::seconds(interval));
 
-	std::string result{curl.call(config, token_endpoint, params)};
+	std::string result{curl.call(config, logger, token_endpoint, params)};
 
 	try
         {
@@ -266,7 +266,7 @@ get_userinfo(const Config &config,
 {
     pam_oauth2_curl curl(config);
 
-    std::string result{curl.call(config, userinfo_endpoint, pam_oauth2_curl::credential(token))};
+    std::string result{curl.call(config, logger, userinfo_endpoint, pam_oauth2_curl::credential(token))};
     try
     {
 	// we do an extra if since the c_str could be expensive
@@ -373,7 +373,7 @@ bool is_authorized(Config const &config,
 	url.append(metadata.project_id);
 
 	// Call with empty credential
-	std::string result{curl.call(config, url, pam_oauth2_curl::credential())};
+	std::string result{curl.call(config, logger, url, pam_oauth2_curl::credential())};
         try
         {
 	    // Extra if in case c_str is expensive -

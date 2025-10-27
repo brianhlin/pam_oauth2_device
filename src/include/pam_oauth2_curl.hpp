@@ -16,6 +16,7 @@
 #include <utility>
 #include <memory>
 
+#include "pam_oauth2_log.hpp"
 
 // pimpl (defined in pam_oauth2_curl_impl.hpp and implemented in pam_oauth2_curl.cpp)
 class pam_oauth2_curl_impl;
@@ -27,6 +28,8 @@ class Config;
 
 
 class pam_oauth2_curl {
+    // The logger is our friend
+    friend class pam_oauth2_log;
 private:
     // A unique pointer needs to know the size of the pointee which goes against the logic of the pimpl
     pam_oauth2_curl_impl *impl_;
@@ -78,11 +81,11 @@ public:
     credential make_credential(Config const &);
 
     //! perform a HTTP GET or POST synchronously, returning result
-    std::string call(Config const &config, std::string const &url);
+    std::string call(Config const &config, pam_oauth2_log &logger, std::string const &url);
     //! perform a HTTP POST synchronously, returning result
-    std::string call(Config const &config, std::string const &url, params const &postdata);
+    std::string call(Config const &config, pam_oauth2_log &logger, std::string const &url, params const &postdata);
     //! perform a HTTP call with custom credentials
-    std::string call(Config const &config, std::string const &url, credential &&cred);
+    std::string call(Config const &config, pam_oauth2_log &logger, std::string const &url, credential &&cred);
     //! add parameters to parameter list
     params &add_params(params &params, std::string const &key, std::string const &value);
     //! URL encode.

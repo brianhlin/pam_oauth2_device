@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "config.hpp"
 #include "pam_oauth2_excpt.hpp"
-
+#include "pam_oauth2_log.hpp"
 
 /*
 #if LIBCURL_VERSION_MAJOR < 7 || LIBCURL_VERSION_MINOR < 60
@@ -48,9 +48,10 @@ pam_oauth2_curl::make_credential(Config const &config)
 // TODO still too much code duplication between the calls
 
 std::string
-pam_oauth2_curl::call(Config const &config, std::string const &url)
+pam_oauth2_curl::call(Config const &config, pam_oauth2_log &logger, std::string const &url)
 {
     call_data readBuffer;
+    long http_code = 0;
     impl_->reset(config);
     impl_->add_call_data(readBuffer);
     impl_->add_credential(readBuffer, make_credential(config));
@@ -66,16 +67,20 @@ pam_oauth2_curl::call(Config const &config, std::string const &url)
 	NetworkError err("curl failed HTTP call");
 	err.add_details(readBuffer.errbuf);
 	throw err;
+    } else {
+      curl_easy_getinfo(impl_, CURLINFO_RESPONSE_CODE, &http_code);
+      logger.log(pam_oauth2_log::log_level_t::DEBUG, "HTTP response code: %ld\n", http_code);
     }
     return readBuffer.callback_data;
 }
 
 
 std::string
-pam_oauth2_curl::call(Config const &config, const std::string &url,
+pam_oauth2_curl::call(Config const &config, pam_oauth2_log &logger, const std::string &url,
 		      std::vector<std::pair<std::string,std::string>> const &postdata)
 {
     call_data readBuffer;
+    long http_code = 0;
     std::string params{pam_oauth2_curl_impl::make_post_data(postdata)};
     impl_->reset(config);
     impl_->add_call_data(readBuffer);
@@ -92,15 +97,20 @@ pam_oauth2_curl::call(Config const &config, const std::string &url,
 	NetworkError err("curl failed HTTP POST");
 	err.add_details(readBuffer.errbuf);
 	throw err;
+    } else {
+      curl_easy_getinfo(impl_, CURLINFO_RESPONSE_CODE, &http_code);
+      logger.log(pam_oauth2_log::log_level_t::DEBUG, "HTTP response code: %ld\n", http_code);
     }
     return readBuffer.callback_data;
 }
 
 
 std::string
-pam_oauth2_curl::call(Config const &config, const std::string &url, credential &&cred)
+pam_oauth2_curl::call(Config const &config, pam_oauth2_log &logger, const std::string &url, credential &&cred)
 {
     call_data readBuffer;
+    long http_code = 0;
+
     impl_->reset(config);
     impl_->add_call_data(readBuffer);
     impl_->add_credential(readBuffer, std::move(cred));
@@ -114,6 +124,9 @@ pam_oauth2_curl::call(Config const &config, const std::string &url, credential &
 	NetworkError err("curl failed HTTP GET");
 	err.add_details(readBuffer.errbuf);
 	throw err;
+    } else {
+      curl_easy_getinfo(impl_, CURLINFO_RESPONSE_CODE, &http_code);
+      logger.log(pam_oauth2_log::log_level_t::DEBUG, "HTTP response code: %ld\n", http_code);
     }
     return readBuffer.callback_data;
 }
